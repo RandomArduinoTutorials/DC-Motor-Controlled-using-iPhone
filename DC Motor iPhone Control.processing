@@ -1,0 +1,45 @@
+//Random Arduino Tutorials//
+//How to Control a DC Motor with an iPhone and an Arduino//
+//Processing//
+
+import oscP5.*;       
+import netP5.*;        
+import processing.serial.*;  
+
+Serial arduinoPort;      
+OscP5 oscP5;         
+
+int motorSpeed = 0;        
+int [] motor = new int [2];    
+void setup() {
+  size(100,100);
+  noStroke();            
+    oscP5 = new OscP5(this,8000);  
+   arduinoPort = new Serial(this, Serial.list()[0], 9600);    
+}
+
+void oscEvent(OscMessage theOscMessage) {  
+
+    String addr = theOscMessage.addrPattern(); 
+    if(addr.indexOf("/1/toggle") !=-1){   
+      int i = int((addr.charAt(9) )) - 0x30;   
+      motor[i]  = int(theOscMessage.get(0).floatValue());    
+   
+    }
+}
+
+void draw() {
+ background(50);      
+
+   if(motor[1] == 0){      
+    arduinoPort.write("r");   
+    motorSpeed = 0;       
+  }
+ if(motor[1] == 1){        
+  arduinoPort.write("R");   
+  motorSpeed = 255;        
+  }
+fill(motorSpeed,0,0);            
+   ellipse(50, 50, 50, 50);   
+               
+}
