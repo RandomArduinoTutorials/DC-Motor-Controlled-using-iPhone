@@ -1,0 +1,26 @@
+//Random Arduino Tutorials//
+//How to Control a DC Motor with an iPhone and an Arduino//
+//Arduino//
+
+int message = 0;    
+int motorPin = 11;  
+int motorSpeed = 0;          
+
+void setup() {  
+  Serial.begin(9600);  
+}
+
+void loop(){
+    if (Serial.available() > 0) { 
+      message = Serial.read();   
+
+   if (message == 'R'){  
+     motorSpeed = 255;     
+   }
+   if (message == 'r'){ 
+     motorSpeed = 0;       
+   }
+
+ }   
+analogWrite(motorPin, motorSpeed);
+}
